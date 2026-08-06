@@ -1,226 +1,205 @@
-// Platshållardata för Wermlands Mejeri Valkompass.
-// Byt ut namn, beskrivningar och bildsökvägar mot riktiga produkter när ni är redo.
-// Varje fråga har alternativ med "weights": poäng (0-3) per produkt-id.
-// Resultatprocenten räknas automatiskt ut mot vad som var maximalt möjligt per produkt.
+// Data för Wermlands Mejeri Valkompass.
+// Resultatet har medvetet ingen koppling till svaren – matchningen i
+// slutresultatet slumpas fram i js/app.js (computeResults). Frågorna nedan
+// är bara för skojs skull, precis som en riktig valkompass.
 
 const PRODUCTS = [
   {
-    id: "mjolk",
+    id: "lattmjolk",
+    name: "Lättmjölk",
+    tagline: "Lätt, luftig och redo för vad som helst.",
+    image: "assets/products/lattmjolk.svg"
+  },
+  {
+    id: "mellanmjolk",
+    name: "Mellanmjölk",
+    tagline: "Perfekt balans – varken för mycket eller för lite.",
+    image: "assets/products/mellanmjolk.svg"
+  },
+  {
+    id: "standardmjolk",
     name: "Standardmjölk",
     tagline: "Den pålitliga klassikern som alltid levererar.",
-    image: "assets/products/mjolk.svg"
-  },
-  {
-    id: "fil",
-    name: "Filmjölk",
-    tagline: "Mysig, syrlig och lite gammaldags på ett bra sätt.",
-    image: "assets/products/fil.svg"
-  },
-  {
-    id: "yoghurt",
-    name: "Yoghurt Naturell",
-    tagline: "Fräsch, sund och redo för vad dagen än bjuder.",
-    image: "assets/products/yoghurt.svg"
-  },
-  {
-    id: "kvarg",
-    name: "Kvarg",
-    tagline: "Proteinstark och målmedveten – ingen tid att förlora.",
-    image: "assets/products/kvarg.svg"
-  },
-  {
-    id: "graddfil",
-    name: "Gräddfil",
-    tagline: "Den sociala allroundaren som passar till det mesta.",
-    image: "assets/products/graddfil.svg"
-  },
-  {
-    id: "smor",
-    name: "Smör",
-    tagline: "Genuin, hantverksmässig och trogen traditionen.",
-    image: "assets/products/smor.svg"
-  },
-  {
-    id: "ost",
-    name: "Prästost",
-    tagline: "Karaktärsstark med en smak som sätter sig.",
-    image: "assets/products/ost.svg"
+    image: "assets/products/standardmjolk.svg"
   },
   {
     id: "gradde",
-    name: "Vispgrädde",
+    name: "Grädde",
     tagline: "Festlig, generös och gör allt lite bättre.",
     image: "assets/products/gradde.svg"
+  },
+  {
+    id: "filmjolk",
+    name: "Filmjölk",
+    tagline: "Mysig, syrlig och lite gammaldags på ett bra sätt.",
+    image: "assets/products/filmjolk.svg"
+  },
+  {
+    id: "yoghurtnaturell",
+    name: "Yoghurt Naturell",
+    tagline: "Fräsch, sund och redo för vad dagen än bjuder.",
+    image: "assets/products/yoghurtnaturell.svg"
+  },
+  {
+    id: "yoghurtvanilj",
+    name: "Yoghurt Vanilj",
+    tagline: "Mjuk, söt och lite extra omtänksam.",
+    image: "assets/products/yoghurtvanilj.svg"
   }
 ];
 
 const QUESTIONS = [
   {
-    text: "Hur börjar din dag bäst?",
+    text: "Hur bör Värmlands framtid finansieras?",
     options: [
-      {
-        text: "Med en stor skål flingor",
-        weights: { mjolk: 3, fil: 0, yoghurt: 1, kvarg: 0, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Filmjölk med lite socker på (skäms inte)",
-        weights: { mjolk: 0, fil: 3, yoghurt: 1, kvarg: 0, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "En proteinrik skål med kvarg och bär",
-        weights: { mjolk: 0, fil: 0, yoghurt: 2, kvarg: 3, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Nybakad macka med rejält med smör och ost",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 2, ost: 3, gradde: 0 }
-      }
+      "Genom statliga bidrag och ökade transfereringar från Stockholm.",
+      "Genom lokalt företagande och självförsörjning.",
+      "Genom en rimligare fördelning av skattebördan.",
+      "Genom att sluta skicka mjölkpengar söderut."
     ]
   },
   {
-    text: "Vilket väder trivs du bäst i?",
+    text: "Vad är viktigast i en hållbar landsbygdspolitik?",
     options: [
-      {
-        text: "Kallt och kristallklart vinterväder",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 2, ost: 0, gradde: 2 }
-      },
-      {
-        text: "Ljummen svensk sommarkväll",
-        weights: { mjolk: 0, fil: 2, yoghurt: 2, kvarg: 0, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Nyfallen förstasnö",
-        weights: { mjolk: 2, fil: 0, yoghurt: 0, kvarg: 1, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Regnigt, myskväll inomhus",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 1, smor: 0, ost: 3, gradde: 0 }
-      }
+      "Bredband och digitalisering.",
+      "Fler djur på naturbete.",
+      "Kortare avstånd från ko till konsument.",
+      "Att politiker faktiskt besöker Nysäter någon gång."
     ]
   },
   {
-    text: "Din favoritsysselsättning en ledig dag?",
+    text: "Hur ställer du dig till fri rörlighet inom Värmland?",
     options: [
-      {
-        text: "Fika med nybakat bröd",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 3, ost: 0, gradde: 1 }
-      },
-      {
-        text: "Långpromenad i skogen",
-        weights: { mjolk: 1, fil: 2, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Träningspass följt av en smoothie",
-        weights: { mjolk: 0, fil: 0, yoghurt: 2, kvarg: 3, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Middagsbjudning med vänner",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 3, smor: 0, ost: 2, gradde: 0 }
-      }
+      "Positivt, folk ska kunna bo och arbeta var de vill.",
+      "Negativt, resurserna koncentreras redan för mycket till städerna.",
+      "Beror på om man menar Karlstad eller hela länet.",
+      "Korna borde få bestämma det själva."
     ]
   },
   {
-    text: "Vilket tillbehör känns mest 'du'?",
+    text: "Vad anser du om gräddens roll i samhället?",
     options: [
-      {
-        text: "Gräddfilsbaserad dressing till allt",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 3, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Riven ost på det mesta",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 0, ost: 3, gradde: 0 }
-      },
-      {
-        text: "En rejäl klick vispgrädde på efterrätten",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 0, ost: 0, gradde: 3 }
-      },
-      {
-        text: "Enkelt är bäst – ett glas kall mjölk till maten",
-        weights: { mjolk: 3, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      }
+      "Den är en lyxvara och bör beskattas hårdare.",
+      "Den är en grundläggande rättighet för alla medborgare.",
+      "Den är undervärderad och förtjänar mer respekt.",
+      "Jag tar alltid lite extra."
     ]
   },
   {
-    text: "Din helgfrukost om du får välja helt fritt?",
+    text: "Hur bör Sverige hantera inflationen?",
     options: [
-      {
-        text: "Pannkakor med sylt och grädde",
-        weights: { mjolk: 1, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 0, ost: 0, gradde: 3 }
-      },
-      {
-        text: "Ostmacka och kaffe i lugn och ro",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 2, ost: 2, gradde: 0 }
-      },
-      {
-        text: "Yoghurtbowl med granola och frukt",
-        weights: { mjolk: 0, fil: 0, yoghurt: 3, kvarg: 1, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Fil med hembakad mysli",
-        weights: { mjolk: 0, fil: 3, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      }
+      "Räntehöjningar och stram finanspolitik.",
+      "Ökade löner och stärkt köpkraft.",
+      "Kortare leveranskedjor och mer lokal produktion.",
+      "Hålla priset på mjölk stabilt, resten löser sig."
     ]
   },
   {
-    text: "Vilket ord beskriver dig bäst?",
+    text: "Vad är din syn på klimatomställningen?",
     options: [
-      {
-        text: "Klassisk",
-        weights: { mjolk: 2, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 1, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Hälsomedveten",
-        weights: { mjolk: 0, fil: 0, yoghurt: 1, kvarg: 3, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Mysig",
-        weights: { mjolk: 0, fil: 2, yoghurt: 0, kvarg: 0, graddfil: 1, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Festlig",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 0, ost: 2, gradde: 2 }
-      }
+      "Snabb och radikal förändring krävs omgående.",
+      "Gradvis omställning utan att slå ut industrin.",
+      "Tekniklösningar och innovation, inte förbud.",
+      "Biobränsle, solceller och kor som sköter sin del."
     ]
   },
   {
-    text: "Din go-to-snack framför tv:n?",
+    text: "Var bör beslut om Värmlands utveckling fattas?",
     options: [
-      {
-        text: "Ostbågar eller en bit lagrad ost",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 0, ost: 3, gradde: 0 }
-      },
-      {
-        text: "Skål med kvarg och honung",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 3, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Macka med rejält lager smör",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 3, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Glass med vispad grädde på topp",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 0, ost: 0, gradde: 3 }
-      }
+      "I riksdagen, med nationell överblick.",
+      "I regionfullmäktige, nära medborgarna.",
+      "Lokalt, i kommunerna.",
+      "Ute i hagen, av dem som faktiskt bor där."
     ]
   },
   {
-    text: "Om du var ett väder, vilket skulle du vara?",
+    text: "Hur ser du på arbetstider?",
     options: [
-      {
-        text: "Mjuk dimma en tidig morgon",
-        weights: { mjolk: 0, fil: 2, yoghurt: 0, kvarg: 0, graddfil: 2, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Klar och frisk vinterdag",
-        weights: { mjolk: 2, fil: 0, yoghurt: 0, kvarg: 2, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Varm sommarsol",
-        weights: { mjolk: 0, fil: 0, yoghurt: 3, kvarg: 0, graddfil: 0, smor: 0, ost: 0, gradde: 0 }
-      },
-      {
-        text: "Mysigt novembermörker med levande ljus",
-        weights: { mjolk: 0, fil: 0, yoghurt: 0, kvarg: 0, graddfil: 0, smor: 2, ost: 2, gradde: 0 }
-      }
+      "Vi behöver mer flexibilitet och rätt att koppla av.",
+      "Kortare arbetsvecka är framtiden.",
+      "Arbetslinjen måste värnas.",
+      "Korna mjölkas tidigt. Alla andra kan anpassa sig."
+    ]
+  },
+  {
+    text: "Vad tycker du om kulturpolitiken i Värmland?",
+    options: [
+      "Mer pengar till scenkonst och kulturinstitutioner.",
+      "Kulturen ska bära sig själv på marknaden.",
+      "Folkbildning och föreningsliv ska prioriteras.",
+      "En ko som tuggar i en mikrofon är också kultur."
+    ]
+  },
+  {
+    text: "Hur bör vi hantera urbaniseringen?",
+    options: [
+      "Satsa på städerna där tillväxten sker.",
+      "Flytta resurser till landsbygden aktivt.",
+      "Bygg ut infrastrukturen så att fler kan pendla.",
+      "Sluta flytta till Stockholm, det finns mjölk här hemma."
+    ]
+  },
+  {
+    text: "Vad är din viktigaste valfråga?",
+    options: [
+      "Skolan och välfärden.",
+      "Trygghet och rättsväsende.",
+      "Klimat och miljö.",
+      "Mejerihyllan."
+    ]
+  },
+  {
+    text: "Hur väljer du vad du röstar på?",
+    options: [
+      "Partiprogram och ideologi.",
+      "Personliga kandidater jag litar på.",
+      "Vad som känns rätt i magen.",
+      "Jag läser på förpackningen."
+    ]
+  },
+  {
+    text: "Vad anser du om offentlig upphandling?",
+    options: [
+      "Den ska prioritera lägsta pris för skattebetalarna.",
+      "Den ska ställa krav på hållbarhet och etik.",
+      "Den ska gynna lokala aktörer.",
+      "Kommunen borde handla mer mjölk från Nysäter."
+    ]
+  },
+  {
+    text: "Hur bör skolan reformeras?",
+    options: [
+      "Mer resurser till lärarna och mindre administration.",
+      "Ordning och kunskapskrav måste återupprättas.",
+      "Valfrihet och mångfald av skolformer.",
+      "Mjölk i skolmålet, från en ko i närheten."
+    ]
+  },
+  {
+    text: "Vad är din syn på mediepolitiken?",
+    options: [
+      "Public service ska stärkas och vara oberoende.",
+      "Marknaden avgör vilken journalistik som överlever.",
+      "Lokala medier behöver särskilt stöd.",
+      "P4 Värmland på transistorradio."
+    ]
+  },
+  {
+    text: "Vad anser du om bostadspolitiken?",
+    options: [
+      "Bygg mer, snabbare och med färre regler.",
+      "Stärk hyresgästernas rättigheter.",
+      "Satsa på ägande och en fungerande bostadsmarknad.",
+      "Det finns gott om plats i Värmland. Vi frågar varför folk bor trångt."
+    ]
+  },
+  {
+    text: "Hur viktig är maten i politiken?",
+    options: [
+      "Livsmedelsberedskap är en säkerhetsfråga.",
+      "Marknaden sköter matförsörjningen bättre än staten.",
+      "Kortare kedjor och mer lokalproducerat måste premieras.",
+      "Det är den viktigaste frågan. Vi är förvånade att det ens är en fråga."
     ]
   }
 ];

@@ -2,11 +2,8 @@
   "use strict";
 
   const state = {
-    currentQuestion: 0,
-    scores: {} // productId -> accumulated points
+    currentQuestion: 0
   };
-
-  const productsById = Object.fromEntries(PRODUCTS.map((p) => [p.id, p]));
 
   const screens = {
     start: document.getElementById("start-screen"),
@@ -36,7 +33,6 @@
 
   function resetState() {
     state.currentQuestion = 0;
-    state.scores = Object.fromEntries(PRODUCTS.map((p) => [p.id, 0]));
   }
 
   function startQuiz() {
@@ -55,23 +51,19 @@
     els.questionText.textContent = q.text;
 
     els.optionsList.innerHTML = "";
-    q.options.forEach((option) => {
+    q.options.forEach((optionText) => {
       const li = document.createElement("li");
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "option-btn";
-      btn.textContent = option.text;
-      btn.addEventListener("click", () => selectAnswer(option));
+      btn.textContent = optionText;
+      btn.addEventListener("click", selectAnswer);
       li.appendChild(btn);
       els.optionsList.appendChild(li);
     });
   }
 
-  function selectAnswer(option) {
-    Object.entries(option.weights).forEach(([productId, points]) => {
-      state.scores[productId] = (state.scores[productId] || 0) + points;
-    });
-
+  function selectAnswer() {
     if (state.currentQuestion < QUESTIONS.length - 1) {
       state.currentQuestion += 1;
       renderQuestion();
@@ -81,25 +73,12 @@
     }
   }
 
-  function computeMaxPossible() {
-    const max = Object.fromEntries(PRODUCTS.map((p) => [p.id, 0]));
-    QUESTIONS.forEach((q) => {
-      PRODUCTS.forEach((p) => {
-        const best = Math.max(...q.options.map((opt) => opt.weights[p.id] || 0));
-        max[p.id] += best;
-      });
-    });
-    return max;
-  }
-
+  // Resultatet har ingen koppling till svaren – det är helt slumpmässigt,
+  // precis som en riktig valkompass borde vara :)
   function computeResults() {
-    const max = computeMaxPossible();
-    return PRODUCTS.map((p) => {
-      const score = state.scores[p.id] || 0;
-      const possible = max[p.id] || 1;
-      const percent = Math.round((score / possible) * 100);
-      return { product: p, percent };
-    }).sort((a, b) => b.percent - a.percent);
+    return PRODUCTS.map((p) => ({ product: p, percent: Math.floor(Math.random() * 101) })).sort(
+      (a, b) => b.percent - a.percent
+    );
   }
 
   function finishQuiz() {
