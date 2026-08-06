@@ -155,6 +155,15 @@
     });
   }
 
+  function drawImageCover(ctx, img, x, y, w, h) {
+    const scale = Math.max(w / img.width, h / img.height);
+    const sw = w / scale;
+    const sh = h / scale;
+    const sx = (img.width - sw) / 2;
+    const sy = (img.height - sh) / 2;
+    ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+  }
+
   async function drawShareCard(top) {
     const canvas = els.shareCanvas;
     const ctx = canvas.getContext("2d");
@@ -190,7 +199,7 @@
       ctx.beginPath();
       ctx.arc(W / 2, y + size / 2, size / 2, 0, Math.PI * 2);
       ctx.clip();
-      ctx.drawImage(img, x, y, size, size);
+      drawImageCover(ctx, img, x, y, size, size);
       ctx.restore();
     } catch (e) {
       // Om bilden inte kan laddas, fortsätt utan den.

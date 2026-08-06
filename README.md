@@ -24,7 +24,8 @@ index.html            Sidstruktur (start, quiz, resultat)
 css/styles.css         Styling
 js/data.js             Produkter + frågor/svarsalternativ (redigera här!)
 js/app.js              Quizlogik och delningsbild
-assets/products/*.svg  Produktbilder (platshållare)
+assets/products/*.jpg  Riktiga produktfoton
+assets/products/kospot-pattern.jpg  Kofläcksmönster, används som bakgrundstextur
 ```
 
 ## Redigera produkter och frågor
@@ -35,9 +36,11 @@ All data ligger i `js/data.js`.
    - `id` – kort unikt id
    - `name` – produktnamn som visas i resultatet
    - `tagline` – kort beskrivande text
-   - `image` – sökväg till bild. Lägg riktiga produktbilder i
-     `assets/products/` (helst kvadratiska, minst 600×600px) och peka `image`
-     dit, t.ex. `assets/products/standardmjolk.jpg`.
+   - `image` – sökväg till bild i `assets/products/`, t.ex.
+     `assets/products/standardmjolk.jpg`. Bilderna är beskurna produktfoton
+     (porträttformat, vit bakgrund) – behåll samma stil vid byte/tillägg av
+     produkter så att den runda croppen i resultatlistan och delningsbilden
+     ser bra ut.
 
 2. **Frågor** – redigera `QUESTIONS`-listan. Varje fråga har `text` och en
    lista `options` (bara text, inga poäng/vikter).
@@ -65,6 +68,7 @@ direkt.
 
 ## Notera
 
-Produktbilderna som ligger i `assets/products/` just nu är enkla
-platshållarbilder – byt ut dem mot riktiga produktfoton enligt ovan innan
-sidan publiceras skarpt.
+Produktbilderna i `assets/products/` är riktiga produktfoton, beskurna och
+komprimerade från originalen (5000×3750px) till max 1000px och JPEG för
+snabb inläsning. Kofläcksmönstret (`kospot-pattern.jpg`) används som en
+subtil bakgrundstextur på hela sidan (se `body::before` i `css/styles.css`).

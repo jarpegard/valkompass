@@ -8,43 +8,43 @@ const PRODUCTS = [
     id: "lattmjolk",
     name: "Lättmjölk",
     tagline: "Lätt, luftig och redo för vad som helst.",
-    image: "assets/products/lattmjolk.svg"
+    image: "assets/products/lattmjolk.jpg"
   },
   {
     id: "mellanmjolk",
     name: "Mellanmjölk",
     tagline: "Perfekt balans – varken för mycket eller för lite.",
-    image: "assets/products/mellanmjolk.svg"
+    image: "assets/products/mellanmjolk.jpg"
   },
   {
     id: "standardmjolk",
     name: "Standardmjölk",
     tagline: "Den pålitliga klassikern som alltid levererar.",
-    image: "assets/products/standardmjolk.svg"
+    image: "assets/products/standardmjolk.jpg"
   },
   {
     id: "gradde",
     name: "Grädde",
     tagline: "Festlig, generös och gör allt lite bättre.",
-    image: "assets/products/gradde.svg"
+    image: "assets/products/gradde.jpg"
   },
   {
     id: "filmjolk",
     name: "Filmjölk",
     tagline: "Mysig, syrlig och lite gammaldags på ett bra sätt.",
-    image: "assets/products/filmjolk.svg"
+    image: "assets/products/filmjolk.jpg"
   },
   {
     id: "yoghurtnaturell",
     name: "Yoghurt Naturell",
     tagline: "Fräsch, sund och redo för vad dagen än bjuder.",
-    image: "assets/products/yoghurtnaturell.svg"
+    image: "assets/products/yoghurtnaturell.jpg"
   },
   {
     id: "yoghurtvanilj",
     name: "Yoghurt Vanilj",
     tagline: "Mjuk, söt och lite extra omtänksam.",
-    image: "assets/products/yoghurtvanilj.svg"
+    image: "assets/products/yoghurtvanilj.jpg"
   }
 ];
 
