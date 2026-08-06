@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valkompassen – Wermlands Mejeri</title>
+  <meta name="description" content="Svara på några snabba frågor och se vilken Wermlands Mejeri-produkt du matchar bäst med." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥛</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app__header">
+      <div class="app__brand">Wermlands Mejeri</div>
+      <h1 class="app__title">Valkompassen</h1>
+    </header>
+
+    <main class="app__main">
+      <!-- Startskärm -->
+      <section id="start-screen" class="screen screen--active">
+        <div class="card card--intro">
+          <p class="intro__lead">
+            Vilken produkt från Wermlands Mejeri passar din personlighet bäst?
+          </p>
+          <p class="intro__sub">
+            Svara på några snabba frågor – helt på skoj – och få ditt personliga matchningsresultat.
+            Perfekt att dela i din story!
+          </p>
+          <button id="start-btn" type="button" class="btn btn--primary">Starta valkompassen</button>
+        </div>
+      </section>
+
+      <!-- Quizskärm -->
+      <section id="quiz-screen" class="screen">
+        <div class="card">
+          <div class="progress">
+            <div class="progress__label" id="progress-label">Fråga 1 av 8</div>
+            <div class="progress__track">
+              <div class="progress__bar" id="progress-bar"></div>
+            </div>
+          </div>
+          <h2 class="question__text" id="question-text">Fråga</h2>
+          <ul class="options-list" id="options-list"></ul>
+        </div>
+      </section>
+
+      <!-- Resultatskärm -->
+      <section id="result-screen" class="screen">
+        <div class="card card--result">
+          <h2 class="result__heading">Ditt resultat</h2>
+          <p class="result__sub">Så här matchar du mot sortimentet:</p>
+          <ul class="result-list" id="result-list"></ul>
+
+          <div class="share-card" id="share-card">
+            <canvas id="share-canvas" width="1080" height="1920"></canvas>
+          </div>
+
+          <div class="result__actions">
+            <button id="share-btn" type="button" class="btn btn--primary">Dela resultat</button>
+            <button id="download-btn" type="button" class="btn btn--secondary">Ladda ner bild</button>
+            <button id="restart-btn" type="button" class="btn btn--ghost">Gör om testet</button>
+          </div>
+          <p class="result__hint">
+            Tips: tryck på "Dela resultat" på mobilen för att dela direkt till Instagram- eller
+            Facebook-story. Fungerar det inte laddar du bara ner bilden och delar den manuellt.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app__footer">
+      <p>Valkompassen är ett lekfullt test och speglar inte några riktiga val eller fakta om produkterna.</p>
+    </footer>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

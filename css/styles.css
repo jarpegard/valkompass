@@ -1,0 +1,337 @@
+:root {
+  --color-bg: #fdf8f0;
+  --color-card: #ffffff;
+  --color-text: #2c2320;
+  --color-text-muted: #6b5c53;
+  --color-accent: #c96b1c;
+  --color-accent-light: #ffe4c4;
+  --color-border: #eee0d0;
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(44, 35, 32, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, #fff6d9 0%, #fdf8f0 40%);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app__header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.app__brand {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 13px;
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.app__title {
+  font-size: 32px;
+  margin: 0;
+}
+
+.app__main {
+  flex: 1;
+}
+
+.screen {
+  display: none;
+}
+
+.screen--active {
+  display: block;
+  animation: fade-in 0.25s ease;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--color-border);
+  padding: 28px 24px;
+}
+
+.card--intro {
+  text-align: center;
+}
+
+.intro__lead {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+.intro__sub {
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn--primary {
+  background: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(201, 107, 28, 0.35);
+}
+
+.btn--secondary {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
+.progress {
+  margin-bottom: 20px;
+}
+
+.progress__label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.progress__track {
+  height: 8px;
+  background: var(--color-accent-light);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress__bar {
+  height: 100%;
+  width: 0%;
+  background: var(--color-accent);
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.question__text {
+  font-size: 22px;
+  margin: 0 0 20px;
+}
+
+.options-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-btn {
+  width: 100%;
+  text-align: left;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  background: #fffdf9;
+  font-size: 16px;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+
+.option-btn:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.option-btn:active {
+  transform: scale(0.99);
+}
+
+.result__heading {
+  margin: 0 0 4px;
+  font-size: 24px;
+}
+
+.result__sub {
+  color: var(--color-text-muted);
+  margin: 0 0 20px;
+}
+
+.result-list {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.result-item {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+}
+
+.result-item--top {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.result-item__img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+}
+
+.result-item__info {
+  min-width: 0;
+}
+
+.result-item__name {
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.result-item__badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--color-accent);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.result-item__tagline {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 2px 0 8px;
+}
+
+.result-item__bar-track {
+  height: 6px;
+  background: rgba(44, 35, 32, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.result-item__bar {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+.result-item__percent {
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.result__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.result__hint {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  margin-top: 16px;
+  line-height: 1.5;
+}
+
+/* Delningskortet renderas till en canvas i bakgrunden, döljs visuellt men behövs i DOM för generering. */
+.share-card {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app__footer {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  margin-top: 32px;
+}
+
+@media (max-width: 420px) {
+  .card {
+    padding: 22px 18px;
+  }
+
+  .result-item {
+    grid-template-columns: 48px 1fr auto;
+  }
+
+  .result-item__img {
+    width: 48px;
+    height: 48px;
+  }
+}
