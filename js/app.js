@@ -93,6 +93,7 @@
     results.forEach((r, index) => {
       const li = document.createElement("li");
       li.className = "result-item" + (index === 0 ? " result-item--top" : "");
+      li.style.setProperty("--accent", r.product.color);
 
       const img = document.createElement("img");
       img.src = r.product.image;
@@ -141,7 +142,8 @@
       name: results[0].product.name,
       percent: results[0].percent,
       image: results[0].product.image,
-      tagline: results[0].product.tagline
+      tagline: results[0].product.tagline,
+      color: results[0].product.color
     });
   }
 
@@ -164,6 +166,20 @@
     ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
   }
 
+  function roundRectPath(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.arcTo(x + w, y, x + w, y + r, r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+    ctx.lineTo(x + r, y + h);
+    ctx.arcTo(x, y + h, x, y + h - r, r);
+    ctx.lineTo(x, y + r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
+  }
+
   async function drawShareCard(top) {
     const canvas = els.shareCanvas;
     const ctx = canvas.getContext("2d");
@@ -183,23 +199,31 @@
     ctx.font = "400 32px 'Segoe UI', system-ui, sans-serif";
     ctx.fillText("Wermlands Mejeri", W / 2, 230);
 
+    const cardW = 480;
+    const cardH = 660;
+    const cardX = (W - cardW) / 2;
+    const cardY = 300;
+    const frame = 16;
+
+    ctx.save();
+    ctx.shadowColor = "rgba(44, 35, 32, 0.25)";
+    ctx.shadowBlur = 40;
+    ctx.shadowOffsetY = 14;
+    roundRectPath(ctx, cardX - frame, cardY - frame, cardW + frame * 2, cardH + frame * 2, 32);
+    ctx.fillStyle = top.color || "#201a17";
+    ctx.fill();
+    ctx.restore();
+
     try {
       const img = await loadImage(top.image);
-      const size = 620;
-      const x = (W - size) / 2;
-      const y = 320;
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(W / 2, y + size / 2, size / 2 + 14, 0, Math.PI * 2);
+      roundRectPath(ctx, cardX, cardY, cardW, cardH, 22);
       ctx.fillStyle = "#ffffff";
       ctx.fill();
-      ctx.restore();
 
       ctx.save();
-      ctx.beginPath();
-      ctx.arc(W / 2, y + size / 2, size / 2, 0, Math.PI * 2);
+      roundRectPath(ctx, cardX, cardY, cardW, cardH, 22);
       ctx.clip();
-      drawImageCover(ctx, img, x, y, size, size);
+      drawImageCover(ctx, img, cardX, cardY, cardW, cardH);
       ctx.restore();
     } catch (e) {
       // Om bilden inte kan laddas, fortsätt utan den.
@@ -210,7 +234,7 @@
     ctx.fillText("Min matchning:", W / 2, 1060);
 
     ctx.font = "800 90px 'Segoe UI', system-ui, sans-serif";
-    ctx.fillStyle = "#c96b1c";
+    ctx.fillStyle = top.color || "#c96b1c";
     ctx.fillText(top.name, W / 2, 1170);
 
     ctx.font = "800 130px 'Segoe UI', system-ui, sans-serif";

@@ -38,9 +38,13 @@ All data ligger i `js/data.js`.
    - `tagline` – kort beskrivande text
    - `image` – sökväg till bild i `assets/products/`, t.ex.
      `assets/products/standardmjolk.jpg`. Bilderna är beskurna produktfoton
-     (porträttformat, vit bakgrund) – behåll samma stil vid byte/tillägg av
-     produkter så att den runda croppen i resultatlistan och delningsbilden
-     ser bra ut.
+     (porträttformat, vit bakgrund, förpackningen fyller nästan hela bilden)
+     – behåll samma stil vid byte/tillägg av produkter så att croppen i
+     resultatlistan och delningsbilden ser bra ut.
+   - `color` – produktens egen brytfärg (hämtad från förpackningens band/
+     produktnamn), används som accentfärg för just den produktens rad,
+     progressbar, badge och delningsbild. Välj en nyans med minst 4.5:1
+     kontrast mot vitt om du byter/lägger till en färg.
 
 2. **Frågor** – redigera `QUESTIONS`-listan. Varje fråga har `text` och en
    lista `options` (bara text, inga poäng/vikter).
@@ -66,9 +70,17 @@ Facebook-story direkt. På skrivbord (eller om Web Share saknas) faller det
 tillbaka på nedladdning av bilden, som knappen **"Ladda ner bild"** också gör
 direkt.
 
-## Notera
+## Design
 
 Produktbilderna i `assets/products/` är riktiga produktfoton, beskurna och
 komprimerade från originalen (5000×3750px) till max 1000px och JPEG för
 snabb inläsning. Kofläcksmönstret (`kospot-pattern.jpg`) används som en
 subtil bakgrundstextur på hela sidan (se `body::before` i `css/styles.css`).
+
+Produktminiatyrerna i resultatlistan är rundade rektanglar (inte cirklar) i
+porträttformat, för att efterlikna förpackningarnas faktiska form istället
+för att beskära bort merparten av en hög mjölkförpackning i en cirkel. Varje
+produkts egna brytfärg (`color` i `js/data.js`) används genomgående för den
+radens ram, progressbar, procentsiffra och "Bästa match"-badge, samt för
+ramen och rubriken i den nedladdningsbara delningsbilden – så att resultatet
+känns kopplat till just den produkten istället för en generisk apphmall.

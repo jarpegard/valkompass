@@ -2,52 +2,62 @@
 // Resultatet har medvetet ingen koppling till svaren – matchningen i
 // slutresultatet slumpas fram i js/app.js (computeResults). Frågorna nedan
 // är bara för skojs skull, precis som en riktig valkompass.
+//
+// "color" är hämtad från respektive förpacknings egen brytfärg (bandet vid
+// korken / produktnamnets färg), justerad för att ge minst 4.5:1 kontrast
+// mot både vit bakgrund och vit text ovanpå.
 
 const PRODUCTS = [
   {
     id: "lattmjolk",
     name: "Lättmjölk",
     tagline: "Lätt, luftig och redo för vad som helst.",
-    image: "assets/products/lattmjolk.jpg"
+    image: "assets/products/lattmjolk.jpg",
+    color: "#0f7e98"
   },
   {
     id: "mellanmjolk",
     name: "Mellanmjölk",
     tagline: "Perfekt balans – varken för mycket eller för lite.",
-    image: "assets/products/mellanmjolk.jpg"
+    image: "assets/products/mellanmjolk.jpg",
+    color: "#4e7e1d"
   },
   {
     id: "standardmjolk",
     name: "Standardmjölk",
     tagline: "Den pålitliga klassikern som alltid levererar.",
-    image: "assets/products/standardmjolk.jpg"
+    image: "assets/products/standardmjolk.jpg",
+    color: "#c80a44"
   },
   {
     id: "gradde",
     name: "Grädde",
     tagline: "Festlig, generös och gör allt lite bättre.",
-    image: "assets/products/gradde.jpg"
+    image: "assets/products/gradde.jpg",
+    color: "#d91356"
   },
   {
     id: "filmjolk",
     name: "Filmjölk",
     tagline: "Mysig, syrlig och lite gammaldags på ett bra sätt.",
-    image: "assets/products/filmjolk.jpg"
+    image: "assets/products/filmjolk.jpg",
+    color: "#a32892"
   },
   {
     id: "yoghurtnaturell",
     name: "Yoghurt Naturell",
     tagline: "Fräsch, sund och redo för vad dagen än bjuder.",
-    image: "assets/products/yoghurtnaturell.jpg"
+    image: "assets/products/yoghurtnaturell.jpg",
+    color: "#162b7d"
   },
   {
     id: "yoghurtvanilj",
     name: "Yoghurt Vanilj",
     tagline: "Mjuk, söt och lite extra omtänksam.",
-    image: "assets/products/yoghurtvanilj.jpg"
+    image: "assets/products/yoghurtvanilj.jpg",
+    color: "#936e23"
   }
 ];
-
 const QUESTIONS = [
   {
     text: "Hur bör Värmlands framtid finansieras?",
@@ -203,3 +213,4 @@ const QUESTIONS = [
     ]
   }
 ];
+
