@@ -157,13 +157,15 @@
     });
   }
 
-  function drawImageCover(ctx, img, x, y, w, h) {
-    const scale = Math.max(w / img.width, h / img.height);
-    const sw = w / scale;
-    const sh = h / scale;
-    const sx = (img.width - sw) / 2;
-    const sy = (img.height - sh) / 2;
-    ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+  function drawImageContain(ctx, img, x, y, w, h, padding) {
+    const innerW = w - padding * 2;
+    const innerH = h - padding * 2;
+    const scale = Math.min(innerW / img.width, innerH / img.height);
+    const dw = img.width * scale;
+    const dh = img.height * scale;
+    const dx = x + (w - dw) / 2;
+    const dy = y + (h - dh) / 2;
+    ctx.drawImage(img, dx, dy, dw, dh);
   }
 
   function roundRectPath(ctx, x, y, w, h, r) {
@@ -223,7 +225,7 @@
       ctx.save();
       roundRectPath(ctx, cardX, cardY, cardW, cardH, 22);
       ctx.clip();
-      drawImageCover(ctx, img, cardX, cardY, cardW, cardH);
+      drawImageContain(ctx, img, cardX, cardY, cardW, cardH, 24);
       ctx.restore();
     } catch (e) {
       // Om bilden inte kan laddas, fortsätt utan den.
