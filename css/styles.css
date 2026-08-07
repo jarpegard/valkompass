@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "League Gothic";
+  src: url("../assets/fonts/LeagueGothic-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --color-bg: #fdf8f0;
   --color-card: #ffffff;
@@ -8,6 +16,8 @@
   --color-border: #eee0d0;
   --radius: 18px;
   --shadow: 0 10px 30px rgba(44, 35, 32, 0.08);
+  --font-heading: "League Gothic", "Arial Narrow", sans-serif;
+  --font-body: "Courier New", Courier, monospace;
 }
 
 * {
@@ -16,11 +26,20 @@
 
 body {
   margin: 0;
-  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-body);
   background: linear-gradient(180deg, #fff6d9 0%, #fdf8f0 40%);
   color: var(--color-text);
   min-height: 100vh;
   position: relative;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: 400;
 }
 
 body::before {

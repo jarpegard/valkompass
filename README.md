@@ -84,3 +84,20 @@ produkts egna brytfärg (`color` i `js/data.js`) används genomgående för den
 radens ram, progressbar, procentsiffra och "Bästa match"-badge, samt för
 ramen och rubriken i den nedladdningsbara delningsbilden – så att resultatet
 känns kopplat till just den produkten istället för en generisk apphmall.
+
+### Typsnitt
+
+- **Rubriker** (`h1`/`h2`, samt motsvarande text i delningsbildens canvas)
+  använder **League Gothic** i versaler – samma typsnitt som
+  "WERMLANDS"-loggan (`assets/brand/Wermlands-Mejeri-PayOff.png`).
+  Fontfilen ligger i `assets/fonts/LeagueGothic-Regular.otf` och laddas via
+  `@font-face` i `css/styles.css`.
+- **Brödtext** (all annan text: knappar, frågor/svar, taglines, etc.)
+  använder **Courier New**, satt som sidans grundtypsnitt (`--font-body` i
+  `css/styles.css`).
+
+Vill ni byta typsnitt: lägg en ny fontfil i `assets/fonts/`, uppdatera
+`@font-face`-blocket och `--font-heading`/`--font-body` i `css/styles.css`.
+Canvas-texten i `drawShareCard` (`js/app.js`) sätter samma typsnitt manuellt
+per rad (t.ex. `ctx.font = "400 56px 'League Gothic', ..."`) eftersom canvas
+inte ärver CSS – uppdatera dem parallellt vid typsnittsbyte.

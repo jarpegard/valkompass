@@ -188,6 +188,11 @@
     const W = canvas.width;
     const H = canvas.height;
 
+    await Promise.all([
+      document.fonts.load("400 60px 'League Gothic'"),
+      document.fonts.load("400 30px 'Courier New'")
+    ]);
+
     const gradient = ctx.createLinearGradient(0, 0, 0, H);
     gradient.addColorStop(0, "#fff6d9");
     gradient.addColorStop(1, "#cfe4ff");
@@ -196,10 +201,10 @@
 
     ctx.textAlign = "center";
     ctx.fillStyle = "#2c2320";
-    ctx.font = "600 44px 'Segoe UI', system-ui, sans-serif";
-    ctx.fillText("VALKOMPASSEN", W / 2, 180);
-    ctx.font = "400 32px 'Segoe UI', system-ui, sans-serif";
-    ctx.fillText("Wermlands Mejeri", W / 2, 230);
+    ctx.font = "400 56px 'League Gothic', 'Arial Narrow', sans-serif";
+    ctx.fillText("VALKOMPASSEN", W / 2, 175);
+    ctx.font = "400 30px 'Courier New', Courier, monospace";
+    ctx.fillText("Wermlands Mejeri", W / 2, 228);
 
     const cardW = 480;
     const cardH = 660;
@@ -231,23 +236,23 @@
       // Om bilden inte kan laddas, fortsätt utan den.
     }
 
-    ctx.font = "700 40px 'Segoe UI', system-ui, sans-serif";
+    ctx.font = "400 34px 'Courier New', Courier, monospace";
     ctx.fillStyle = "#2c2320";
     ctx.fillText("Min matchning:", W / 2, 1060);
 
-    ctx.font = "800 90px 'Segoe UI', system-ui, sans-serif";
-    ctx.fillStyle = top.color || "#c96b1c";
-    ctx.fillText(top.name, W / 2, 1170);
+    ctx.font = "400 120px 'League Gothic', 'Arial Narrow', sans-serif";
+    ctx.fillStyle = top.color || "#201a17";
+    ctx.fillText(top.name.toUpperCase(), W / 2, 1180);
 
-    ctx.font = "800 130px 'Segoe UI', system-ui, sans-serif";
+    ctx.font = "400 160px 'League Gothic', 'Arial Narrow', sans-serif";
     ctx.fillStyle = "#2c2320";
-    ctx.fillText(`${top.percent}%`, W / 2, 1330);
+    ctx.fillText(`${top.percent}%`, W / 2, 1340);
 
-    ctx.font = "400 36px 'Segoe UI', system-ui, sans-serif";
+    ctx.font = "400 32px 'Courier New', Courier, monospace";
     ctx.fillStyle = "#5a4c44";
-    wrapText(ctx, top.tagline, W / 2, 1420, 820, 46);
+    wrapText(ctx, top.tagline, W / 2, 1420, 820, 42);
 
-    ctx.font = "500 34px 'Segoe UI', system-ui, sans-serif";
+    ctx.font = "400 30px 'Courier New', Courier, monospace";
     ctx.fillStyle = "#2c2320";
     ctx.fillText("Gör testet du också 👉", W / 2, 1780);
 
