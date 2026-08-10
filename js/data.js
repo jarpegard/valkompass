@@ -86,8 +86,8 @@ const QUESTIONS = [
   {
     text: "Vilken värmländsk ko-alition skulle du vilja se?",
     options: [
-      "Värmländsk mjölk i kaffet från Löfbergs.",
-      { text: "Jordgubbar från Ängebäck eller Höglunda i värmländsk grädde.", boost: ["gradde"] },
+      "Värmländsk mjölk i kaffe som rostas i Karlstad.",
+      { text: "Jordgubbar som är odlade i Värmland i värmländsk grädde.", boost: ["gradde"] },
       "Ett glas mjölk passar till det mesta som är närproducerat.",
       "Allt samarbete är alltid muuucket bra!"
     ]
