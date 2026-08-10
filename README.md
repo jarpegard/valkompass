@@ -88,13 +88,29 @@ All data ligger i `js/data.js`.
 ## Hur matchningen räknas ut
 
 `computeResults()` i `js/app.js` slumpar fram en procent 5–90 per produkt.
-Om besökaren svarat på ett alternativ med `boost` (just nu bara
-färgfrågan, kopplad till mjölkens klassiska färgkodning: blå = lätt,
-grön = mellan, röd = standard) slumpas de produkterna istället i
-intervallet 72–97 – så det svaret väger tungt utan att vara en garanti.
-`MAX_PERCENT` (97) sätter också ett tak så att ingen produkt någonsin kan
-landa på exakt 100%. Vill ni att fler frågor ska påverka resultatet, lägg
-till `boost` på fler alternativ i `js/data.js`.
+Om besökaren svarat på ett alternativ med `boost` (färgfrågan, kopplad till
+mjölkens klassiska färgkodning: blå = lätt, grön = mellan, röd = standard;
+samt jordgubbsalternativet under ko-alitionsfrågan) slumpas de produkterna
+istället i intervallet 72–97 – så det svaret väger tungt utan att vara en
+garanti. `MAX_PERCENT` (97) sätter också ett tak så att ingen produkt
+någonsin kan landa på exakt 100%.
+
+Utöver slumpen/boosten formas listan alltid enligt några fasta regler:
+
+1. **Grädde eller en mjölk toppar alltid** – Filmjölk eller en yoghurt kan
+   aldrig hamna på förstaplatsen (`topCandidates` i `computeResults()`).
+2. **En mjölk hamnar alltid i mitten** (plats 4 av 7) **och en mjölk hamnar
+   alltid sist** (plats 7).
+3. **Om grädde inte toppar** hamnar grädde ändå garanterat **topp 3**
+   (plats 2 eller 3).
+4. **Om Standardmjölk toppar** blir Lättmjölk specifikt den som hamnar
+   sist (och Mellanmjölk blir då automatiskt den som hamnar i mitten).
+
+Percentvärdena räknas fram slumpmässigt som vanligt och sorteras fallande –
+det är bara vilken produkt som hamnar på vilken plats som styrs av
+reglerna ovan, så resultatet känns fortfarande slumpmässigt från gång till
+gång. Vill ni ändra eller lägga till fler strukturregler, gör det i
+`computeResults()` i `js/app.js`.
 
 ## Delningsfunktionen
 

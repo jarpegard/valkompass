@@ -88,16 +88,89 @@
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  // Resultatet är till största delen slumpmässigt, men produkter kopplade
-  // till boostade svar får ett högt slumptal istället för ett lågt/mellan –
-  // så de svaren väger tungt utan att vara en garanti. Ingen produkt kan
-  // någonsin landa på exakt 100%.
+  function shuffle(list) {
+    const arr = list.slice();
+    for (let i = arr.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  const MILK_IDS = ["lattmjolk", "mellanmjolk", "standardmjolk"];
+  const MIDDLE_RANK = 3; // 0-indexad, dvs plats 4 av 7 – "mitten"
+  const BOTTOM_RANK = 6; // sista platsen – "minst"
+
+  // Resultatet är till största delen slumpmässigt (boostade produkter får ett
+  // högt slumptal, se randomInt ovan), men formen på listan följer alltid
+  // dessa regler:
+  // 1. Grädde eller en mjölk toppar alltid – aldrig filmjölk eller yoghurt.
+  // 2. En mjölk hamnar alltid någonstans i mitten, och en mjölk hamnar alltid
+  //    sist.
+  // 3. Om grädde inte toppar ska grädde ändå hamna topp-3.
+  // 4. Om standardmjölk toppar ska lättmjölk vara den som hamnar sist (då
+  //    blir mellanmjölk per automatik den som hamnar i mitten).
+  // Ingen produkt kan någonsin landa på exakt 100% (MAX_PERCENT).
   function computeResults() {
-    return PRODUCTS.map((p) => {
-      const range = state.boostedIds.has(p.id) ? BOOSTED_RANGE : NORMAL_RANGE;
-      const percent = randomInt(range[0], range[1]);
-      return { product: p, percent };
-    }).sort((a, b) => b.percent - a.percent);
+    const byId = Object.fromEntries(PRODUCTS.map((p) => [p.id, p]));
+    const allIds = PRODUCTS.map((p) => p.id);
+
+    const basePercent = {};
+    allIds.forEach((id) => {
+      const range = state.boostedIds.has(id) ? BOOSTED_RANGE : NORMAL_RANGE;
+      basePercent[id] = randomInt(range[0], range[1]);
+    });
+
+    // Rang 0 (top) går till vem som helst av grädde/mjölkarna som råkar ha
+    // högst slumptal – boostade svar (färgfrågan, jordgubbsalternativet)
+    // väger in här precis som förut, de får bara aldrig konkurrens av
+    // filmjölk/yoghurt om förstaplatsen.
+    const topCandidates = ["gradde", ...MILK_IDS];
+    const topper = topCandidates.reduce((best, id) =>
+      basePercent[id] > basePercent[best] ? id : best
+    );
+
+    const rankToId = {};
+    rankToId[0] = topper;
+
+    if (topper === "standardmjolk") {
+      rankToId[MIDDLE_RANK] = "mellanmjolk";
+      rankToId[BOTTOM_RANK] = "lattmjolk";
+    } else if (MILK_IDS.includes(topper)) {
+      const [middleMilk, bottomMilk] = shuffle(MILK_IDS.filter((id) => id !== topper));
+      rankToId[MIDDLE_RANK] = middleMilk;
+      rankToId[BOTTOM_RANK] = bottomMilk;
+    } else {
+      // Grädde toppar – två av de tre mjölkarna täcker mitten/botten, den
+      // tredje är fri och hamnar bland de obundna platserna nedan.
+      const [middleMilk, bottomMilk] = shuffle(MILK_IDS);
+      rankToId[MIDDLE_RANK] = middleMilk;
+      rankToId[BOTTOM_RANK] = bottomMilk;
+    }
+
+    if (topper !== "gradde") {
+      // Grädde toppade inte – då måste grädde ändå in topp-3 (plats 2 eller 3).
+      const graddeRank = Math.random() < 0.5 ? 1 : 2;
+      rankToId[graddeRank] = "gradde";
+    }
+
+    const usedIds = new Set(Object.values(rankToId));
+    const remainingIds = shuffle(allIds.filter((id) => !usedIds.has(id))).sort(
+      (a, b) => basePercent[b] - basePercent[a]
+    );
+    const remainingRanks = [1, 2, 3, 4, 5, 6].filter((r) => !(r in rankToId));
+    remainingRanks.forEach((rank, i) => {
+      rankToId[rank] = remainingIds[i];
+    });
+
+    const sortedPercents = allIds
+      .map((id) => basePercent[id])
+      .sort((a, b) => b - a);
+
+    return sortedPercents.map((percent, rank) => ({
+      product: byId[rankToId[rank]],
+      percent
+    }));
   }
 
   function finishQuiz() {
