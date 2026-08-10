@@ -17,6 +17,34 @@ python3 -m http.server 8000
 # öppna http://localhost:8000
 ```
 
+## Deploya till Netlify
+
+Repot har en `netlify.toml` som redan säger åt Netlify att sidan inte
+behöver byggas (`publish = "."`, ingen build command) – den ligger direkt i
+repo-roten som statiska filer.
+
+**Snabbast, för en engångslänk att visa upp (ingen auto-uppdatering):**
+
+1. Gå till [app.netlify.com/drop](https://app.netlify.com/drop).
+2. Dra in hela projektmappen (eller ladda ner branchen som zip från GitHub
+   och dra in den uppackade mappen).
+3. Netlify ger dig direkt en länk (typ `random-name-123.netlify.app`).
+
+**Med GitHub-koppling (auto-deploy vid varje push, rekommenderas):**
+
+1. Logga in på [app.netlify.com](https://app.netlify.com) → **Add new site**
+   → **Import an existing project** → **GitHub**.
+2. Välj repot `jarpegard/valkompass`.
+3. Välj vilken branch som ska deployas (just nu ligger allt på
+   `claude/wermlands-mejeri-valkompass-uc1319` – välj den, eller merga till
+   `main` först om ni vill att Netlify ska följa huvudbranchen istället).
+4. Build command: lämna tomt. Publish directory: `.` (fylls i automatiskt
+   från `netlify.toml`).
+5. **Deploy site**. Varje ny push till den valda branchen triggar automatiskt
+   en ny deploy.
+6. Under **Site settings → Domain management** kan ni sätta ett eget
+   `*.netlify.app`-namn eller koppla en egen domän.
+
 ## Filstruktur
 
 ```
