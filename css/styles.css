@@ -353,11 +353,13 @@ body::before {
   pointer-events: none;
 }
 
-.app__footer {
-  text-align: center;
-  color: var(--color-text-muted);
-  font-size: 12px;
-  margin-top: 32px;
+.intro__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
 @media (max-width: 420px) {
