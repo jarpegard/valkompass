@@ -77,7 +77,7 @@ body::before {
 
 .app__logo {
   flex-shrink: 0;
-  width: 68px;
+  width: 92px;
   height: auto;
 }
 
@@ -381,11 +381,11 @@ body::before {
   }
 
   .app__logo {
-    width: 52px;
+    width: 66px;
   }
 
   .app__title {
-    font-size: 38px;
+    font-size: 34px;
   }
 
   .card {
