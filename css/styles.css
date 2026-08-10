@@ -68,8 +68,21 @@ body::before {
 }
 
 .app__header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
   margin-bottom: 24px;
+}
+
+.app__logo {
+  flex-shrink: 0;
+  width: 68px;
+  height: auto;
+}
+
+.app__header-text {
+  text-align: left;
 }
 
 .app__brand {
@@ -363,6 +376,18 @@ body::before {
 }
 
 @media (max-width: 420px) {
+  .app__header {
+    gap: 12px;
+  }
+
+  .app__logo {
+    width: 52px;
+  }
+
+  .app__title {
+    font-size: 38px;
+  }
+
   .card {
     padding: 22px 18px;
   }
