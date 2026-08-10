@@ -1,11 +1,16 @@
 // Data för Wermlands Mejeri Valkompass.
-// Resultatet har medvetet ingen koppling till svaren – matchningen i
-// slutresultatet slumpas fram i js/app.js (computeResults). Frågorna nedan
-// är bara för skojs skull, precis som en riktig valkompass.
 //
 // "color" är hämtad från respektive förpacknings egen brytfärg (bandet vid
 // korken / produktnamnets färg), justerad för att ge minst 4.5:1 kontrast
 // mot både vit bakgrund och vit text ovanpå.
+//
+// Resultatet är till största delen slumpmässigt (js/app.js, computeResults),
+// men färgfrågan ("Väljer du rött, grönt eller blått?") väger tungt: varje
+// svarsalternativ kan ha ett "boost"-fält med produkt-id:n som då får ett
+// högt slumptal istället för ett lågt/mellan, kopplat till mjölkens klassiska
+// färgkodning (blå = lätt, grön = mellan, röd = standard). Övriga frågor har
+// bara vanlig text och påverkar inte resultatet. Ingen produkt kan någonsin
+// landa på 100% (se MAX_PERCENT i app.js).
 
 const PRODUCTS = [
   {
@@ -58,159 +63,49 @@ const PRODUCTS = [
     color: "#936e23"
   }
 ];
+
 const QUESTIONS = [
   {
-    text: "Hur bör Värmlands framtid finansieras?",
+    text: "Vilket val intresserar dig mest?",
+    options: ["Riksdagsvalet.", "Regionsvalet.", "Ko-mu-nalvalet."]
+  },
+  {
+    text: "Väljer du rött, grönt eller blått?",
     options: [
-      "Genom statliga bidrag och ökade transfereringar från Stockholm.",
-      "Genom lokalt företagande och självförsörjning.",
-      "Genom en rimligare fördelning av skattebördan.",
-      "Genom att sluta skicka mjölkpengar söderut."
+      { text: "Rött.", boost: ["standardmjolk"] },
+      { text: "Grönt.", boost: ["mellanmjolk"] },
+      { text: "Blått.", boost: ["lattmjolk"] },
+      {
+        text: "Det beror på om det är till kaffet, till maten eller i glaset – såklart!",
+        boost: ["gradde", "filmjolk", "standardmjolk"]
+      }
     ]
   },
   {
-    text: "Vad är viktigast i en hållbar landsbygdspolitik?",
+    text: "Vilken värmländsk ko-alition skulle du vilja se?",
     options: [
-      "Bredband och digitalisering.",
-      "Fler djur på naturbete.",
-      "Kortare avstånd från ko till konsument.",
-      "Att politiker faktiskt besöker Nysäter någon gång."
+      "Värmländsk mjölk i kaffet från Löfbergs.",
+      "Jordgubbar från Ängebäck eller Höglunda i värmländsk grädde.",
+      "Ett glas mjölk passar till det mesta som är närproducerat.",
+      "Allt samarbete är alltid muuucket bra!"
     ]
   },
   {
-    text: "Hur ställer du dig till fri rörlighet inom Värmland?",
+    text: "Hur ser du på ko-handel?",
     options: [
-      "Positivt, folk ska kunna bo och arbeta var de vill.",
-      "Negativt, resurserna koncentreras redan för mycket till städerna.",
-      "Beror på om man menar Karlstad eller hela länet.",
-      "Korna borde få bestämma det själva."
+      "Det beror helt på vad korna har att erbjuda?",
+      "Det hör demokratin till – utan ko-mpromisser händer ingenting.",
+      "Skamligt. Håll vad du lovar!",
+      "Bara det inte sker bakom stängda dörrar."
     ]
   },
   {
-    text: "Vad anser du om gräddens roll i samhället?",
+    text: "Vilken ko-mpromiss är okej?",
     options: [
-      "Den är en lyxvara och bör beskattas hårdare.",
-      "Den är en grundläggande rättighet för alla medborgare.",
-      "Den är undervärderad och förtjänar mer respekt.",
-      "Jag tar alltid lite extra."
-    ]
-  },
-  {
-    text: "Hur bör Sverige hantera inflationen?",
-    options: [
-      "Räntehöjningar och stram finanspolitik.",
-      "Ökade löner och stärkt köpkraft.",
-      "Kortare leveranskedjor och mer lokal produktion.",
-      "Hålla priset på mjölk stabilt, resten löser sig."
-    ]
-  },
-  {
-    text: "Vad är din syn på klimatomställningen?",
-    options: [
-      "Snabb och radikal förändring krävs omgående.",
-      "Gradvis omställning utan att slå ut industrin.",
-      "Tekniklösningar och innovation, inte förbud.",
-      "Biobränsle, solceller och kor som sköter sin del."
-    ]
-  },
-  {
-    text: "Var bör beslut om Värmlands utveckling fattas?",
-    options: [
-      "I riksdagen, med nationell överblick.",
-      "I regionfullmäktige, nära medborgarna.",
-      "Lokalt, i kommunerna.",
-      "Ute i hagen, av dem som faktiskt bor där."
-    ]
-  },
-  {
-    text: "Hur ser du på arbetstider?",
-    options: [
-      "Vi behöver mer flexibilitet och rätt att koppla av.",
-      "Kortare arbetsvecka är framtiden.",
-      "Arbetslinjen måste värnas.",
-      "Korna mjölkas tidigt. Alla andra kan anpassa sig."
-    ]
-  },
-  {
-    text: "Vad tycker du om kulturpolitiken i Värmland?",
-    options: [
-      "Mer pengar till scenkonst och kulturinstitutioner.",
-      "Kulturen ska bära sig själv på marknaden.",
-      "Folkbildning och föreningsliv ska prioriteras.",
-      "En ko som tuggar i en mikrofon är också kultur."
-    ]
-  },
-  {
-    text: "Hur bör vi hantera urbaniseringen?",
-    options: [
-      "Satsa på städerna där tillväxten sker.",
-      "Flytta resurser till landsbygden aktivt.",
-      "Bygg ut infrastrukturen så att fler kan pendla.",
-      "Sluta flytta till Stockholm, det finns mjölk här hemma."
-    ]
-  },
-  {
-    text: "Vad är din viktigaste valfråga?",
-    options: [
-      "Skolan och välfärden.",
-      "Trygghet och rättsväsende.",
-      "Klimat och miljö.",
-      "Mejerihyllan."
-    ]
-  },
-  {
-    text: "Hur väljer du vad du röstar på?",
-    options: [
-      "Partiprogram och ideologi.",
-      "Personliga kandidater jag litar på.",
-      "Vad som känns rätt i magen.",
-      "Jag läser på förpackningen."
-    ]
-  },
-  {
-    text: "Vad anser du om offentlig upphandling?",
-    options: [
-      "Den ska prioritera lägsta pris för skattebetalarna.",
-      "Den ska ställa krav på hållbarhet och etik.",
-      "Den ska gynna lokala aktörer.",
-      "Kommunen borde handla mer mjölk från Nysäter."
-    ]
-  },
-  {
-    text: "Hur bör skolan reformeras?",
-    options: [
-      "Mer resurser till lärarna och mindre administration.",
-      "Ordning och kunskapskrav måste återupprättas.",
-      "Valfrihet och mångfald av skolformer.",
-      "Mjölk i skolmålet, från en ko i närheten."
-    ]
-  },
-  {
-    text: "Vad är din syn på mediepolitiken?",
-    options: [
-      "Public service ska stärkas och vara oberoende.",
-      "Marknaden avgör vilken journalistik som överlever.",
-      "Lokala medier behöver särskilt stöd.",
-      "P4 Värmland på transistorradio."
-    ]
-  },
-  {
-    text: "Vad anser du om bostadspolitiken?",
-    options: [
-      "Bygg mer, snabbare och med färre regler.",
-      "Stärk hyresgästernas rättigheter.",
-      "Satsa på ägande och en fungerande bostadsmarknad.",
-      "Det finns gott om plats i Värmland. Vi frågar varför folk bor trångt."
-    ]
-  },
-  {
-    text: "Hur viktig är maten i politiken?",
-    options: [
-      "Livsmedelsberedskap är en säkerhetsfråga.",
-      "Marknaden sköter matförsörjningen bättre än staten.",
-      "Kortare kedjor och mer lokalproducerat måste premieras.",
-      "Det är den viktigaste frågan. Vi är förvånade att det ens är en fråga."
+      "Att vi delar med oss av den värmländska mjölken utanför länsgränsen, bara det räcker till oss.",
+      "Jordgubbar med mjölk i stället för grädde.",
+      "Ett glas saft till nybakta bullar – om mjölken är slut.",
+      "Så länge kossorna är okej, är jag okej."
     ]
   }
 ];
-

@@ -47,18 +47,26 @@ All data ligger i `js/data.js`.
      kontrast mot vitt om du byter/lägger till en färg.
 
 2. **Frågor** – redigera `QUESTIONS`-listan. Varje fråga har `text` och en
-   lista `options` (bara text, inga poäng/vikter).
+   lista `options`. Ett alternativ kan antingen vara:
+   - bara en textsträng (påverkar inte resultatet, helt slumpmässigt), eller
+   - ett objekt `{ text, boost: [produkt-id, ...] }` – de angivna
+     produkterna får då ett högt slumptal istället för ett lågt/mellan när
+     resultatet räknas ut (se nedan). Just nu används det bara i
+     färgfrågan ("Väljer du rött, grönt eller blått?").
 
 3. Koden är datadriven – lägg till eller ta bort hur många produkter eller
    frågor som helst utan att röra `app.js`.
 
 ## Hur matchningen räknas ut
 
-Resultatprocenten är medvetet helt slumpmässig och räknas ut i
-`computeResults()` i `js/app.js` när quizet är klart – svaren under vägen
-påverkar inte vilken produkt man "matchar" med. Vill ni istället koppla
-svaren till resultatet går det bra att bygga om `computeResults()` att räkna
-poäng per svar, men nuvarande upplägg är ett medvetet val.
+`computeResults()` i `js/app.js` slumpar fram en procent 5–90 per produkt.
+Om besökaren svarat på ett alternativ med `boost` (just nu bara
+färgfrågan, kopplad till mjölkens klassiska färgkodning: blå = lätt,
+grön = mellan, röd = standard) slumpas de produkterna istället i
+intervallet 72–97 – så det svaret väger tungt utan att vara en garanti.
+`MAX_PERCENT` (97) sätter också ett tak så att ingen produkt någonsin kan
+landa på exakt 100%. Vill ni att fler frågor ska påverka resultatet, lägg
+till `boost` på fler alternativ i `js/data.js`.
 
 ## Delningsfunktionen
 

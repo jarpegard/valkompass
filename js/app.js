@@ -1,8 +1,13 @@
 (function () {
   "use strict";
 
+  const MAX_PERCENT = 97;
+  const BOOSTED_RANGE = [72, MAX_PERCENT];
+  const NORMAL_RANGE = [5, 90];
+
   const state = {
-    currentQuestion: 0
+    currentQuestion: 0,
+    colorBoost: null
   };
 
   const screens = {
@@ -33,6 +38,7 @@
 
   function resetState() {
     state.currentQuestion = 0;
+    state.colorBoost = null;
   }
 
   function startQuiz() {
@@ -51,19 +57,24 @@
     els.questionText.textContent = q.text;
 
     els.optionsList.innerHTML = "";
-    q.options.forEach((optionText) => {
+    q.options.forEach((option) => {
+      const isPlainText = typeof option === "string";
       const li = document.createElement("li");
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "option-btn";
-      btn.textContent = optionText;
-      btn.addEventListener("click", selectAnswer);
+      btn.textContent = isPlainText ? option : option.text;
+      btn.addEventListener("click", () => selectAnswer(isPlainText ? null : option.boost));
       li.appendChild(btn);
       els.optionsList.appendChild(li);
     });
   }
 
-  function selectAnswer() {
+  function selectAnswer(boost) {
+    if (boost) {
+      state.colorBoost = boost;
+    }
+
     if (state.currentQuestion < QUESTIONS.length - 1) {
       state.currentQuestion += 1;
       renderQuestion();
@@ -73,12 +84,21 @@
     }
   }
 
-  // Resultatet har ingen koppling till svaren – det är helt slumpmässigt,
-  // precis som en riktig valkompass borde vara :)
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // Resultatet är till största delen slumpmässigt, men produkten/produkterna
+  // kopplade till färgsvaret får ett högt slumptal istället för ett
+  // lågt/mellan – så färgvalet väger tungt utan att vara en garanti. Ingen
+  // produkt kan någonsin landa på exakt 100%.
   function computeResults() {
-    return PRODUCTS.map((p) => ({ product: p, percent: Math.floor(Math.random() * 101) })).sort(
-      (a, b) => b.percent - a.percent
-    );
+    const boostSet = new Set(state.colorBoost || []);
+    return PRODUCTS.map((p) => {
+      const range = boostSet.has(p.id) ? BOOSTED_RANGE : NORMAL_RANGE;
+      const percent = randomInt(range[0], range[1]);
+      return { product: p, percent };
+    }).sort((a, b) => b.percent - a.percent);
   }
 
   function finishQuiz() {
