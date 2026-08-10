@@ -7,7 +7,7 @@
 
   const state = {
     currentQuestion: 0,
-    colorBoost: null
+    boostedIds: new Set()
   };
 
   const screens = {
@@ -38,7 +38,7 @@
 
   function resetState() {
     state.currentQuestion = 0;
-    state.colorBoost = null;
+    state.boostedIds = new Set();
   }
 
   function startQuiz() {
@@ -72,7 +72,7 @@
 
   function selectAnswer(boost) {
     if (boost) {
-      state.colorBoost = boost;
+      boost.forEach((id) => state.boostedIds.add(id));
     }
 
     if (state.currentQuestion < QUESTIONS.length - 1) {
@@ -88,14 +88,13 @@
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  // Resultatet är till största delen slumpmässigt, men produkten/produkterna
-  // kopplade till färgsvaret får ett högt slumptal istället för ett
-  // lågt/mellan – så färgvalet väger tungt utan att vara en garanti. Ingen
-  // produkt kan någonsin landa på exakt 100%.
+  // Resultatet är till största delen slumpmässigt, men produkter kopplade
+  // till boostade svar får ett högt slumptal istället för ett lågt/mellan –
+  // så de svaren väger tungt utan att vara en garanti. Ingen produkt kan
+  // någonsin landa på exakt 100%.
   function computeResults() {
-    const boostSet = new Set(state.colorBoost || []);
     return PRODUCTS.map((p) => {
-      const range = boostSet.has(p.id) ? BOOSTED_RANGE : NORMAL_RANGE;
+      const range = state.boostedIds.has(p.id) ? BOOSTED_RANGE : NORMAL_RANGE;
       const percent = randomInt(range[0], range[1]);
       return { product: p, percent };
     }).sort((a, b) => b.percent - a.percent);

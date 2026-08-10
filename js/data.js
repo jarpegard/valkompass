@@ -4,13 +4,15 @@
 // korken / produktnamnets färg), justerad för att ge minst 4.5:1 kontrast
 // mot både vit bakgrund och vit text ovanpå.
 //
-// Resultatet är till största delen slumpmässigt (js/app.js, computeResults),
-// men färgfrågan ("Väljer du rött, grönt eller blått?") väger tungt: varje
-// svarsalternativ kan ha ett "boost"-fält med produkt-id:n som då får ett
-// högt slumptal istället för ett lågt/mellan, kopplat till mjölkens klassiska
-// färgkodning (blå = lätt, grön = mellan, röd = standard). Övriga frågor har
-// bara vanlig text och påverkar inte resultatet. Ingen produkt kan någonsin
-// landa på 100% (se MAX_PERCENT i app.js).
+// Resultatet är till största delen slumpmässigt (js/app.js, computeResults).
+// Ett svarsalternativ kan ha ett "boost"-fält med produkt-id:n som då får ett
+// högt slumptal istället för ett lågt/mellan – just nu används det i
+// färgfrågan ("Väljer du rött, grönt eller blått?", kopplat till mjölkens
+// klassiska färgkodning: blå = lätt, grön = mellan, röd = standard) och i
+// jordgubbs-alternativet under ko-alitionsfrågan (boostar Grädde). Fler
+// boostade alternativ ackumuleras – de påverkar resultatet tillsammans.
+// Övriga alternativ är bara vanlig text och påverkar inte resultatet. Ingen
+// produkt kan någonsin landa på 100% (se MAX_PERCENT i app.js).
 
 const PRODUCTS = [
   {
@@ -85,7 +87,7 @@ const QUESTIONS = [
     text: "Vilken värmländsk ko-alition skulle du vilja se?",
     options: [
       "Värmländsk mjölk i kaffet från Löfbergs.",
-      "Jordgubbar från Ängebäck eller Höglunda i värmländsk grädde.",
+      { text: "Jordgubbar från Ängebäck eller Höglunda i värmländsk grädde.", boost: ["gradde"] },
       "Ett glas mjölk passar till det mesta som är närproducerat.",
       "Allt samarbete är alltid muuucket bra!"
     ]
