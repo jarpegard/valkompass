@@ -1,9 +1,22 @@
 (function () {
   "use strict";
 
-  const MAX_PERCENT = 97;
-  const BOOSTED_RANGE = [72, MAX_PERCENT];
-  const NORMAL_RANGE = [5, 90];
+  // Används bara internt för att avgöra VILKEN produkt som vinner en plats
+  // (se computeResults) – inte det procenttal som till slut visas.
+  const PREFERENCE_BOOSTED_RANGE = [72, 97];
+  const PREFERENCE_NORMAL_RANGE = [5, 90];
+
+  // Det procenttal som faktiskt visas beror bara på slutlig placering:
+  // plats 1–2, 3–5 respektive 6–7 har varsitt fast intervall.
+  const RANK_PERCENT_BANDS = [
+    [73, 92], // plats 1
+    [73, 92], // plats 2
+    [32, 64], // plats 3
+    [32, 64], // plats 4
+    [32, 64], // plats 5
+    [6, 14], // plats 6
+    [6, 14] // plats 7
+  ];
 
   const state = {
     currentQuestion: 0,
@@ -135,25 +148,26 @@
   const MIDDLE_RANK = 3; // 0-indexad, dvs plats 4 av 7 – "mitten"
   const BOTTOM_RANK = 6; // sista platsen – "minst"
 
-  // Resultatet är till största delen slumpmässigt (boostade produkter får ett
-  // högt slumptal, se randomInt ovan), men formen på listan följer alltid
-  // dessa regler:
+  // Resultatet är till största delen slumpmässigt (boostade produkter vinner
+  // oftare en plats, se PREFERENCE_*_RANGE ovan), men formen på listan
+  // följer alltid dessa regler:
   // 1. Grädde eller en mjölk toppar alltid – aldrig filmjölk eller yoghurt.
   // 2. En mjölk hamnar alltid någonstans i mitten, och en mjölk hamnar alltid
   //    sist.
   // 3. Om grädde inte toppar ska grädde ändå hamna topp-3.
   // 4. Om standardmjölk toppar ska lättmjölk vara den som hamnar sist (då
   //    blir mellanmjölk per automatik den som hamnar i mitten).
-  // Ingen produkt kan någonsin landa på exakt 100% (MAX_PERCENT).
+  // Det slutliga procenttalet styrs sedan helt av RANK_PERCENT_BANDS ovan,
+  // så ingen produkt kan någonsin landa på 100%.
   function computeResults() {
     const byId = Object.fromEntries(PRODUCTS.map((p) => [p.id, p]));
     const allIds = PRODUCTS.map((p) => p.id);
     const boostedIds = getBoostedIds();
 
-    const basePercent = {};
+    const preference = {};
     allIds.forEach((id) => {
-      const range = boostedIds.has(id) ? BOOSTED_RANGE : NORMAL_RANGE;
-      basePercent[id] = randomInt(range[0], range[1]);
+      const range = boostedIds.has(id) ? PREFERENCE_BOOSTED_RANGE : PREFERENCE_NORMAL_RANGE;
+      preference[id] = randomInt(range[0], range[1]);
     });
 
     // Rang 0 (top) går till vem som helst av grädde/mjölkarna som råkar ha
@@ -162,7 +176,7 @@
     // filmjölk/yoghurt om förstaplatsen.
     const topCandidates = ["gradde", ...MILK_IDS];
     const topper = topCandidates.reduce((best, id) =>
-      basePercent[id] > basePercent[best] ? id : best
+      preference[id] > preference[best] ? id : best
     );
 
     const rankToId = {};
@@ -191,18 +205,25 @@
 
     const usedIds = new Set(Object.values(rankToId));
     const remainingIds = shuffle(allIds.filter((id) => !usedIds.has(id))).sort(
-      (a, b) => basePercent[b] - basePercent[a]
+      (a, b) => preference[b] - preference[a]
     );
     const remainingRanks = [1, 2, 3, 4, 5, 6].filter((r) => !(r in rankToId));
     remainingRanks.forEach((rank, i) => {
       rankToId[rank] = remainingIds[i];
     });
 
-    const sortedPercents = allIds
-      .map((id) => basePercent[id])
-      .sort((a, b) => b - a);
+    // Procenttalen slumpas per band och sorteras sedan fallande inom varje
+    // band (topp-2/mitten-3/botten-2 sinsemellan), så listan alltid känns
+    // konsekvent oavsett vilken produkt som råkar hamna var.
+    const sortDesc = (values) => values.slice().sort((a, b) => b - a);
+    const rawPercents = RANK_PERCENT_BANDS.map(([min, max]) => randomInt(min, max));
+    const finalPercents = [
+      ...sortDesc(rawPercents.slice(0, 2)),
+      ...sortDesc(rawPercents.slice(2, 5)),
+      ...sortDesc(rawPercents.slice(5, 7))
+    ];
 
-    return sortedPercents.map((percent, rank) => ({
+    return finalPercents.map((percent, rank) => ({
       product: byId[rankToId[rank]],
       percent
     }));

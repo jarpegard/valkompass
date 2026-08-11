@@ -96,15 +96,15 @@ boostade produkter om från grunden vid varje resultat (`getBoostedIds()`)
 
 ## Hur matchningen räknas ut
 
-`computeResults()` i `js/app.js` slumpar fram en procent 5–90 per produkt.
-Om besökaren svarat på ett alternativ med `boost` (färgfrågan, kopplad till
-mjölkens klassiska färgkodning: blå = lätt, grön = mellan, röd = standard;
-samt jordgubbsalternativet under ko-alitionsfrågan) slumpas de produkterna
-istället i intervallet 72–97 – så det svaret väger tungt utan att vara en
-garanti. `MAX_PERCENT` (97) sätter också ett tak så att ingen produkt
-någonsin kan landa på exakt 100%.
+`computeResults()` i `js/app.js` avgör resultatet i två separata steg:
 
-Utöver slumpen/boosten formas listan alltid enligt några fasta regler:
+**1. Vilken produkt hamnar var** – styrs av en intern "preferens" (inte det
+som visas): boostade produkter (färgfrågan, kopplad till mjölkens
+klassiska färgkodning blå/grön/röd = lätt/mellan/standard, samt
+jordgubbsalternativet under ko-alitionsfrågan) får ett högt slumptal
+(`PREFERENCE_BOOSTED_RANGE`, 72–97) istället för lågt/mellan
+(`PREFERENCE_NORMAL_RANGE`, 5–90), så det svaret väger tungt utan att vara
+en garanti. Utöver det formas listan alltid enligt fasta regler:
 
 1. **Grädde eller en mjölk toppar alltid** – Filmjölk eller en yoghurt kan
    aldrig hamna på förstaplatsen (`topCandidates` i `computeResults()`).
@@ -115,11 +115,20 @@ Utöver slumpen/boosten formas listan alltid enligt några fasta regler:
 4. **Om Standardmjölk toppar** blir Lättmjölk specifikt den som hamnar
    sist (och Mellanmjölk blir då automatiskt den som hamnar i mitten).
 
-Percentvärdena räknas fram slumpmässigt som vanligt och sorteras fallande –
-det är bara vilken produkt som hamnar på vilken plats som styrs av
-reglerna ovan, så resultatet känns fortfarande slumpmässigt från gång till
-gång. Vill ni ändra eller lägga till fler strukturregler, gör det i
-`computeResults()` i `js/app.js`.
+**2. Vilket procenttal som visas** – styrs helt av `RANK_PERCENT_BANDS`,
+oberoende av boost/preferens:
+
+| Placering | Intervall |
+| --- | --- |
+| 1–2 | 73–92% |
+| 3–5 | 32–64% |
+| 6–7 | 6–14% |
+
+Värdena slumpas inom respektive band och sorteras fallande sinsemellan
+(topp-2, mitten-3, botten-2), så listan alltid känns konsekvent. Eftersom
+toppbandet slutar på 92 kan ingen produkt någonsin landa på 100%. Vill ni
+ändra banden eller strukturreglerna, gör det i `computeResults()` i
+`js/app.js`.
 
 ## Delningsfunktionen
 
