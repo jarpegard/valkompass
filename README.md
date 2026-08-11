@@ -85,6 +85,15 @@ All data ligger i `js/data.js`.
 3. Koden är datadriven – lägg till eller ta bort hur många produkter eller
    frågor som helst utan att röra `app.js`.
 
+## Navigering i quizet
+
+Besökaren kan gå fram och tillbaka mellan frågorna med knapparna
+"← Tillbaka" och "Framåt →" under svarsalternativen. Alla svar sparas i
+`state.answers` (ett index per fråga), så tidigare val visas markerade när
+man går tillbaka, och ändrar man ett svar (t.ex. färgfrågan) räknas
+boostade produkter om från grunden vid varje resultat (`getBoostedIds()`)
+– det gamla svaret påverkar då inte längre resultatet.
+
 ## Hur matchningen räknas ut
 
 `computeResults()` i `js/app.js` slumpar fram en procent 5–90 per produkt.

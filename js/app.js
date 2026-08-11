@@ -7,7 +7,7 @@
 
   const state = {
     currentQuestion: 0,
-    boostedIds: new Set()
+    answers: [] // svarat optionsindex per fråga, null om obesvarad
   };
 
   const screens = {
@@ -23,6 +23,8 @@
     progressLabel: document.getElementById("progress-label"),
     questionText: document.getElementById("question-text"),
     optionsList: document.getElementById("options-list"),
+    backBtn: document.getElementById("back-btn"),
+    forwardBtn: document.getElementById("forward-btn"),
     resultList: document.getElementById("result-list"),
     shareBtn: document.getElementById("share-btn"),
     downloadBtn: document.getElementById("download-btn"),
@@ -38,7 +40,7 @@
 
   function resetState() {
     state.currentQuestion = 0;
-    state.boostedIds = new Set();
+    state.answers = QUESTIONS.map(() => null);
   }
 
   function startQuiz() {
@@ -51,30 +53,38 @@
     const q = QUESTIONS[state.currentQuestion];
     const total = QUESTIONS.length;
     const step = state.currentQuestion + 1;
+    const isLast = state.currentQuestion === total - 1;
+    const answeredIndex = state.answers[state.currentQuestion];
 
     els.progressBar.style.width = `${((step - 1) / total) * 100}%`;
     els.progressLabel.textContent = `Fråga ${step} av ${total}`;
     els.questionText.textContent = q.text;
 
     els.optionsList.innerHTML = "";
-    q.options.forEach((option) => {
+    q.options.forEach((option, index) => {
       const isPlainText = typeof option === "string";
       const li = document.createElement("li");
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "option-btn";
+      btn.className = "option-btn" + (index === answeredIndex ? " option-btn--selected" : "");
       btn.textContent = isPlainText ? option : option.text;
-      btn.addEventListener("click", () => selectAnswer(isPlainText ? null : option.boost));
+      btn.addEventListener("click", () => selectAnswer(index));
       li.appendChild(btn);
       els.optionsList.appendChild(li);
     });
+
+    els.backBtn.disabled = state.currentQuestion === 0;
+    els.forwardBtn.disabled = answeredIndex === null;
+    els.forwardBtn.textContent = isLast ? "Se resultat →" : "Framåt →";
   }
 
-  function selectAnswer(boost) {
-    if (boost) {
-      boost.forEach((id) => state.boostedIds.add(id));
-    }
+  function selectAnswer(index) {
+    state.answers[state.currentQuestion] = index;
+    renderQuestion();
+    advance();
+  }
 
+  function advance() {
     if (state.currentQuestion < QUESTIONS.length - 1) {
       state.currentQuestion += 1;
       renderQuestion();
@@ -82,6 +92,30 @@
       els.progressBar.style.width = "100%";
       finishQuiz();
     }
+  }
+
+  function goBack() {
+    if (state.currentQuestion > 0) {
+      state.currentQuestion -= 1;
+      renderQuestion();
+    }
+  }
+
+  function goForward() {
+    if (state.answers[state.currentQuestion] === null) return;
+    advance();
+  }
+
+  function getBoostedIds() {
+    const ids = new Set();
+    state.answers.forEach((optionIndex, questionIndex) => {
+      if (optionIndex === null) return;
+      const option = QUESTIONS[questionIndex].options[optionIndex];
+      if (typeof option !== "string" && option.boost) {
+        option.boost.forEach((id) => ids.add(id));
+      }
+    });
+    return ids;
   }
 
   function randomInt(min, max) {
@@ -114,10 +148,11 @@
   function computeResults() {
     const byId = Object.fromEntries(PRODUCTS.map((p) => [p.id, p]));
     const allIds = PRODUCTS.map((p) => p.id);
+    const boostedIds = getBoostedIds();
 
     const basePercent = {};
     allIds.forEach((id) => {
-      const range = state.boostedIds.has(id) ? BOOSTED_RANGE : NORMAL_RANGE;
+      const range = boostedIds.has(id) ? BOOSTED_RANGE : NORMAL_RANGE;
       basePercent[id] = randomInt(range[0], range[1]);
     });
 
@@ -426,6 +461,8 @@
 
   els.startBtn.addEventListener("click", startQuiz);
   els.restartBtn.addEventListener("click", () => showScreen("start"));
+  els.backBtn.addEventListener("click", goBack);
+  els.forwardBtn.addEventListener("click", goForward);
   els.shareBtn.addEventListener("click", handleShare);
   els.downloadBtn.addEventListener("click", handleDownload);
 
