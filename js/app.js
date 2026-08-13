@@ -414,6 +414,10 @@
     ctx.fillStyle = "#2c2320";
     ctx.fillText("Gör testet du också 👉", W / 2, 1780);
 
+    ctx.font = "400 56px 'League Gothic', 'Arial Narrow', sans-serif";
+    ctx.fillStyle = "#201a17";
+    ctx.fillText("VALJVARMLAND.SE", W / 2, 1850);
+
     return canvas;
   }
 
