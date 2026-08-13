@@ -186,13 +186,23 @@
       rankToId[MIDDLE_RANK] = "mellanmjolk";
       rankToId[BOTTOM_RANK] = "lattmjolk";
     } else if (MILK_IDS.includes(topper)) {
-      const [middleMilk, bottomMilk] = shuffle(MILK_IDS.filter((id) => id !== topper));
+      // De två mjölkar som inte toppade måste fylla mitten/botten. Den med
+      // högst preferens (t.ex. boostad via färgfrågan men råkade ändå inte
+      // toppa) får den bättre av de två platserna – aldrig botten bara för
+      // att en blind slump råkade välja den.
+      const [middleMilk, bottomMilk] = MILK_IDS.filter((id) => id !== topper).sort(
+        (a, b) => preference[b] - preference[a]
+      );
       rankToId[MIDDLE_RANK] = middleMilk;
       rankToId[BOTTOM_RANK] = bottomMilk;
     } else {
-      // Grädde toppar – två av de tre mjölkarna täcker mitten/botten, den
-      // tredje är fri och hamnar bland de obundna platserna nedan.
-      const [middleMilk, bottomMilk] = shuffle(MILK_IDS);
+      // Grädde toppar – två av de tre mjölkarna täcker mitten/botten. Den
+      // med högst preferens får vara den "lediga" som istället konkurrerar
+      // om en bättre plats bland de obundna platserna nedan, så en boostad
+      // mjölk aldrig kan slumpas till botten.
+      const [, middleMilk, bottomMilk] = MILK_IDS.slice().sort(
+        (a, b) => preference[b] - preference[a]
+      );
       rankToId[MIDDLE_RANK] = middleMilk;
       rankToId[BOTTOM_RANK] = bottomMilk;
     }
