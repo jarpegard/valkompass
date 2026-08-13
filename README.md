@@ -17,33 +17,23 @@ python3 -m http.server 8000
 # öppna http://localhost:8000
 ```
 
-## Deploya till Netlify
+## Deploy (Beebyte, FTP)
 
-Repot har en `netlify.toml` som redan säger åt Netlify att sidan inte
-behöver byggas (`publish = "."`, ingen build command) – den ligger direkt i
-repo-roten som statiska filer.
+Domän och webbhotell ligger hos Beebyte. Sajten är statisk (inget
+byggsteg), så en deploy är bara: ladda upp filerna via FTP/SFTP till
+webbrotens katalog (`public_html`, `www` eller motsvarande i Beebytes
+filstruktur), och skriva över de gamla.
 
-**Snabbast, för en engångslänk att visa upp (ingen auto-uppdatering):**
+Vid varje kodändring paketeras en zip med `index.html`, `css/`, `js/` och
+`assets/` (allt utom källfiler som inte används av sajten, t.ex. den
+oberedda originalloggan) – packa upp den och ladda upp innehållet.
 
-1. Gå till [app.netlify.com/drop](https://app.netlify.com/drop).
-2. Dra in hela projektmappen (eller ladda ner branchen som zip från GitHub
-   och dra in den uppackade mappen).
-3. Netlify ger dig direkt en länk (typ `random-name-123.netlify.app`).
-
-**Med GitHub-koppling (auto-deploy vid varje push, rekommenderas):**
-
-1. Logga in på [app.netlify.com](https://app.netlify.com) → **Add new site**
-   → **Import an existing project** → **GitHub**.
-2. Välj repot `jarpegard/valkompass`.
-3. Välj vilken branch som ska deployas (just nu ligger allt på
-   `claude/wermlands-mejeri-valkompass-uc1319` – välj den, eller merga till
-   `main` först om ni vill att Netlify ska följa huvudbranchen istället).
-4. Build command: lämna tomt. Publish directory: `.` (fylls i automatiskt
-   från `netlify.toml`).
-5. **Deploy site**. Varje ny push till den valda branchen triggar automatiskt
-   en ny deploy.
-6. Under **Site settings → Domain management** kan ni sätta ett eget
-   `*.netlify.app`-namn eller koppla en egen domän.
+**Viktigt – cache:** `index.html` laddar `css/styles.css`, `js/data.js`
+och `js/app.js` med en `?v=ÅÅÅÅMMDDx`-querysträng (cache busting). Vid
+varje ny zip ändras det datumet, så att webbläsare/ev. cache hos Beebyte
+hämtar de nya filerna direkt istället för att visa en gammal cachad
+version efter uppladdning – annars kan en vanlig omladdning (F5) visa
+gammalt innehåll trots att filerna är uppdaterade på servern.
 
 ## Filstruktur
 
