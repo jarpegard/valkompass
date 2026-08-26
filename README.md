@@ -7,8 +7,10 @@ politik) och resultatet har ingen koppling till svaren – matchningen slumpas
 fram, precis som charmen med en riktig valkompass. Resultatet går att dela
 direkt som en delningsbar bild, t.ex. till Instagram- eller Facebook-story.
 
-Statisk sida – ingen byggprocess eller server krävs. Öppna `index.html` eller
-hosta mappen på valfri statisk hosting (GitHub Pages, Netlify, Vercel, S3 …).
+Statisk sida – ingen byggprocess krävs. Öppna `index.html` eller hosta mappen
+på valfri statisk hosting. Ett litet PHP-skript (`count.php`) används för att
+räkna genomförda test (se "Statistik" nedan) – webbhotellet behöver därför
+stödja PHP, vilket Beebytes delade webbhotell gör.
 
 ## Köra lokalt
 
@@ -24,9 +26,11 @@ byggsteg), så en deploy är bara: ladda upp filerna via FTP/SFTP till
 webbrotens katalog (`public_html`, `www` eller motsvarande i Beebytes
 filstruktur), och skriva över de gamla.
 
-Vid varje kodändring paketeras en zip med `index.html`, `css/`, `js/` och
-`assets/` (allt utom källfiler som inte används av sajten, t.ex. den
-oberedda originalloggan) – packa upp den och ladda upp innehållet.
+Vid varje kodändring paketeras en zip med `index.html`, `css/`, `js/`,
+`assets/`, `count.php` och `stats.php` (allt utom källfiler som inte
+används av sajten, t.ex. den oberedda originalloggan) – packa upp den och
+ladda upp innehållet. **OBS:** ladda inte upp/skriv över `counter-data.json`
+om den redan finns på servern – då nollställs statistiken.
 
 **Viktigt – cache:** `index.html` laddar `css/styles.css`, `js/data.js`
 och `js/app.js` med en `?v=ÅÅÅÅMMDDx`-querysträng (cache busting). Vid
@@ -35,6 +39,26 @@ hämtar de nya filerna direkt istället för att visa en gammal cachad
 version efter uppladdning – annars kan en vanlig omladdning (F5) visa
 gammalt innehåll trots att filerna är uppdaterade på servern.
 
+## Statistik (genomförda test)
+
+För att kunna se hur många som genomför valkompassen finns en egen liten
+räknare – helt utan tredjepartstjänster och utan att spara några
+personuppgifter:
+
+- `count.php` tar emot ett anrop (POST) när någon når resultatskärmen
+  (anropas från `finishQuiz()` i `js/app.js` via `fetch(...)`, "fire and
+  forget" – misslyckas anropet påverkar det inte upplevelsen). Skriptet
+  räknar bara upp en siffra i filen `counter-data.json` (skapas
+  automatiskt på servern, låses vid skrivning för att undvika krockar).
+  **Ingen IP-adress, inga cookies, ingen user-agent eller annan
+  identifierande data sparas** – bara ett heltal.
+- `stats.php` är en enkel sida som visar antalet, för den som vill kika på
+  siffran. Den är inte länkad någonstans i sajten, bara nåbar direkt via
+  `valjvarmland.se/stats.php`.
+
+Vill ni nollställa räknaren: radera `counter-data.json` på servern (den
+skapas på nytt automatiskt vid nästa genomförda test).
+
 ## Filstruktur
 
 ```
@@ -42,6 +66,8 @@ index.html            Sidstruktur (start, quiz, resultat)
 css/styles.css         Styling
 js/data.js             Produkter + frågor/svarsalternativ (redigera här!)
 js/app.js              Quizlogik och delningsbild
+count.php              Tar emot räkning av genomförda test (ingen persondata)
+stats.php              Visar antalet genomförda test
 assets/products/*.jpg  Riktiga produktfoton
 assets/products/kospot-pattern.jpg  Kofläcksmönster, används som bakgrundstextur
 ```

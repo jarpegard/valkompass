@@ -243,6 +243,18 @@
     const results = computeResults();
     renderResults(results);
     showScreen("result");
+    recordCompletion();
+  }
+
+  function recordCompletion() {
+    // Skickar bara en räkning – ingen identifierande data. Om det
+    // misslyckas (t.ex. blockerad av annonsblockerare) påverkar det
+    // inte upplevelsen på något sätt.
+    try {
+      fetch("count.php", { method: "POST", keepalive: true }).catch(() => {});
+    } catch (err) {
+      // ignorera
+    }
   }
 
   function renderResults(results) {
