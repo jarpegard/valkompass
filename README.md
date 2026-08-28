@@ -39,6 +39,16 @@ hämtar de nya filerna direkt istället för att visa en gammal cachad
 version efter uppladdning – annars kan en vanlig omladdning (F5) visa
 gammalt innehåll trots att filerna är uppdaterade på servern.
 
+## Kampanjsidan (/kampanj)
+
+`kampanj.html` är en egen liten undersida som visar kampanjfilmen (inbäddad
+från Vimeo) och de fem kampanjaffischerna i `assets/campaign/`. Den nås via
+knappen **"Se hela kampanjen →"** längst ner på resultatskärmen
+(`index.html`, länkar till `kampanj.html`). Vill ni byta film: uppdatera
+video-id/hash i `<iframe src="https://player.vimeo.com/video/...">`. Vill
+ni lägga till fler affischer: släng in fler bilder i `assets/campaign/` och
+lägg till en `<li><img ...></li>` i `.campaign-grid` i `kampanj.html`.
+
 ## Statistik (genomförda test)
 
 För att kunna se hur många som genomför valkompassen finns en egen liten
