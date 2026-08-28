@@ -445,6 +445,14 @@ body::before {
   aspect-ratio: 2 / 3;
 }
 
+.campaign-grid__item--full {
+  grid-column: 1 / -1;
+}
+
+.campaign-grid__item--full img {
+  aspect-ratio: 3 / 2;
+}
+
 @media (max-width: 420px) {
   .campaign-grid {
     grid-template-columns: 1fr;
